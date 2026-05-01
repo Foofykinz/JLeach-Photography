@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+
+const allPhotos  = await getCollection('photos');
+const featured   = allPhotos
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Duplicate the array so the CSS loop appears seamless
+const reelPhotos = [...featured, ...featured];
+---
+
+{featured.length > 0 && (
+  <section class="photo-reel-section" aria-label="Featured photos reel">
+    <p class="photo-reel-label">Featured Work</p>
+    <div class="reel-track" aria-hidden="true">
+      {reelPhotos.map((photo, i) => (
+        <div class="reel-item" key={i}>
+          <img
+            src={photo.data.image}
+            alt={photo.data.caption || photo.data.title || 'Featured photo by Joshua Leach'}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+)}

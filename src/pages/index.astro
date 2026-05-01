@@ -1,0 +1,47 @@
+---
+import BaseLayout  from '../layouts/BaseLayout.astro';
+import Hero        from '../components/Hero.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import settings    from '../data/settings.json';
+---
+
+<BaseLayout
+  title="JLeach Photography"
+  description="Photography portfolio of Joshua Leach — portraits, landscapes, storms, animals, and vehicles."
+>
+  <!-- Hero: full-height, dark -->
+  <Hero />
+
+  <!-- 3-column category grid -->
+  <GalleryGrid />
+
+  <!-- Bio strip -->
+  <section class="bio-strip">
+    <div class="bio-strip-grid">
+      <!-- Left: short bio excerpt -->
+      <div class="bio-card">
+        <p>
+          Hello all! I'm Josh, born and raised in Illinois, now living in Oklahoma.
+          A photographer driven by a passion for capturing moments in all their forms—from
+          quiet landscapes to raw emotion in portraits. Let the work speak for itself.
+        </p>
+        <a href="/about" class="read-more">Read more →</a>
+      </div>
+
+      <!-- Right: contact info + socials -->
+      <div class="bio-card bio-card-info">
+        <h3>Joshua Leach</h3>
+        <p class="location">Oklahoma</p>
+        <a href={`mailto:${settings.contactEmail}`} class="contact-email">
+          {settings.contactEmail}
+        </a>
+        <div class="social-links">
+          <a href={settings.facebook}  target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href={settings.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href={settings.flickr}    target="_blank" rel="noopener noreferrer">Flickr</a>
+          <a href={settings.twitter}   target="_blank" rel="noopener noreferrer">X</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

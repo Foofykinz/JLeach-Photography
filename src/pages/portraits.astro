@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoGrid  from '../components/PhotoGrid.astro';
+import { getCollection } from 'astro:content';
+
+const photos = await getCollection('photos', ({ data }) => data.category === 'portraits');
+---
+
+<BaseLayout
+  title="Portraits"
+  description="Portrait photography by Joshua Leach — capturing personality and emotion."
+>
+  <div class="category-page">
+    <div class="category-header">
+      <h1>Portraits</h1>
+      <p>Capturing the personality and emotion behind every face.</p>
+    </div>
+    <PhotoGrid photos={photos} />
+  </div>
+</BaseLayout>

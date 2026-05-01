@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoGrid  from '../components/PhotoGrid.astro';
+import { getCollection } from 'astro:content';
+
+const photos = await getCollection('photos', ({ data }) => data.category === 'storms');
+---
+
+<BaseLayout
+  title="Storms"
+  description="Storm photography by Joshua Leach — nature's most powerful moments."
+>
+  <div class="category-page">
+    <div class="category-header">
+      <h1>Storms</h1>
+      <p>Nature's raw power — supercells, lightning, and the drama of severe weather.</p>
+    </div>
+    <PhotoGrid photos={photos} />
+  </div>
+</BaseLayout>

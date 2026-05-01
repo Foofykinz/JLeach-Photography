@@ -1,0 +1,81 @@
+---
+import BaseLayout  from '../layouts/BaseLayout.astro';
+import PhotoReel   from '../components/PhotoReel.astro';
+import settings    from '../data/settings.json';
+import { getCollection } from 'astro:content';
+
+const aboutEntries = await getCollection('about');
+const about        = aboutEntries[0];
+const { Content }  = about ? await about.render() : { Content: null };
+
+const headshot = about?.data.headshot?.trim() || '';
+const stats    = about?.data.stats ?? [];
+---
+
+<BaseLayout
+  title="About"
+  description="About Joshua Leach — photographer based in Oklahoma."
+>
+  <div class="about-page">
+
+    <!-- Section 1: Headshot + Bio -->
+    <div class="about-intro">
+      <div class="about-photo-col">
+        {headshot ? (
+          <img
+            src={headshot}
+            alt="Joshua Leach"
+            class="about-headshot"
+            loading="lazy"
+          />
+        ) : (
+          <div class="about-headshot-placeholder">
+            <span>Headshot<br />coming soon</span>
+          </div>
+        )}
+      </div>
+
+      <div class="about-bio">
+        <h1>Joshua Leach</h1>
+        <p class="about-subtitle">Photographer · Oklahoma</p>
+
+        <div class="about-bio-text">
+          {Content ? <Content /> : (
+            <p>
+              Hello all! I'm Josh, born and raised in Illinois, now living in Oklahoma!
+              I'm a photographer driven by a passion for capturing moments in all their
+              forms—from the quiet beauty of expansive landscapes to the raw emotion found
+              in portraits. My work spans a wide range of photography styles, allowing me
+              to tell stories through different perspectives, lighting, and environments.
+              Whether it's the power of a storm, the subtle details in nature, or the
+              personality behind a face, I aim to preserve each scene with authenticity
+              and impact.
+            </p>
+          )}
+        </div>
+
+        <div class="social-links">
+          <a href={settings.facebook}  target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href={settings.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href={settings.flickr}    target="_blank" rel="noopener noreferrer">Flickr</a>
+          <a href={settings.twitter}   target="_blank" rel="noopener noreferrer">X</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Stats row (full bleed, dark background) -->
+  {stats.length > 0 && (
+    <div class="stats-row">
+      {stats.map(({ label, value }) => (
+        <div class="stat-item">
+          <div class="stat-value">{value}</div>
+          <div class="stat-label">{label}</div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <!-- Section 3: Featured photo reel -->
+  <PhotoReel />
+</BaseLayout>

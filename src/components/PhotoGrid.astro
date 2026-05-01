@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  photos: CollectionEntry<'photos'>[];
+}
+
+const { photos } = Astro.props;
+const sorted = [...photos].sort((a, b) => a.data.order - b.data.order);
+---
+
+<div class="photo-grid">
+  {sorted.length === 0 && (
+    <p class="photo-grid-empty">Photos coming soon — check back later!</p>
+  )}
+
+  {sorted.map((photo) => (
+    <a
+      href={photo.data.image}
+      class="glightbox photo-item"
+      data-gallery="portfolio"
+      data-description={photo.data.caption || photo.data.title || ''}
+      aria-label={`View photo: ${photo.data.title || photo.data.caption || 'Photo by Joshua Leach'}`}
+    >
+      <img
+        src={photo.data.image}
+        alt={photo.data.caption || photo.data.title || 'Photo by Joshua Leach'}
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  ))}
+</div>

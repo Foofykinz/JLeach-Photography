@@ -1,0 +1,101 @@
+---
+// SETUP: Replace the action URL below with your deployed Cloudflare Worker URL.
+// See workers/contact-form.js and the README for deployment instructions.
+const WORKER_URL = 'https://YOUR_WORKER_NAME.YOUR_ACCOUNT.workers.dev/contact';
+
+// SETUP: Replace with your Cloudflare Turnstile site key (free at dash.cloudflare.com → Turnstile)
+const TURNSTILE_SITE_KEY = 'YOUR_TURNSTILE_SITE_KEY';
+---
+
+<form
+  class="contact-form"
+  id="contact-form"
+  novalidate
+  data-worker-url={WORKER_URL}
+>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" autocomplete="name" required placeholder="Your name" />
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" autocomplete="email" required placeholder="your@email.com" />
+  </div>
+
+  <div class="form-group">
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" required placeholder="What's this about?" />
+  </div>
+
+  <div class="form-group">
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="6" required placeholder="Write your message here..."></textarea>
+  </div>
+
+  <!-- Cloudflare Turnstile CAPTCHA -->
+  <div
+    class="cf-turnstile"
+    data-sitekey={TURNSTILE_SITE_KEY}
+    data-theme="light"
+    data-size="normal"
+  ></div>
+
+  <button type="submit" class="btn btn-dark" id="submit-btn">Send Message</button>
+
+  <div id="form-status" class="form-status" role="alert" aria-live="polite"></div>
+</form>
+
+<!-- Turnstile script -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+  const form       = document.getElementById('contact-form') as HTMLFormElement | null;
+  const statusEl   = document.getElementById('form-status') as HTMLElement | null;
+  const submitBtn  = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+  function setStatus(msg: string, type: 'success' | 'error' | 'sending') {
+    if (!statusEl) return;
+    statusEl.textContent = msg;
+    statusEl.className   = `form-status visible ${type}`;
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const workerUrl = form.dataset.workerUrl ?? '';
+    if (!workerUrl || workerUrl.includes('YOUR_WORKER')) {
+      setStatus('Contact form not yet configured. Please email directly.', 'error');
+      return;
+    }
+
+    const data: Record<string, string> = {};
+    new FormData(form).forEach((val, key) => { data[key] = val as string; });
+
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+    setStatus('Sending your message…', 'sending');
+
+    try {
+      const res = await fetch(workerUrl, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        setStatus("Message sent! I'll be in touch soon.", 'success');
+        form.reset();
+        // Reset Turnstile widget
+        if (typeof (window as unknown as { turnstile?: { reset: () => void } }).turnstile !== 'undefined') {
+          (window as unknown as { turnstile: { reset: () => void } }).turnstile.reset();
+        }
+      } else {
+        throw new Error(`HTTP ${res.status}`);
+      }
+    } catch {
+      setStatus('Something went wrong. Please email me directly at jmleachphotography@gmail.com', 'error');
+    } finally {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send Message'; }
+    }
+  });
+</script>

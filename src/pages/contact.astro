@@ -1,0 +1,47 @@
+---
+import BaseLayout   from '../layouts/BaseLayout.astro';
+import ContactForm  from '../components/ContactForm.astro';
+import settings     from '../data/settings.json';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Joshua Leach for photography inquiries."
+>
+  <div class="contact-page">
+    <h1>Get in Touch</h1>
+    <p class="page-sub">Have a question or want to work together? Send a message below.</p>
+
+    <div class="contact-layout">
+      <!-- Form -->
+      <ContactForm />
+
+      <!-- Contact info panel -->
+      <aside class="contact-info">
+        <h3>Contact Info</h3>
+
+        <div class="contact-info-item">
+          <span class="contact-info-label">Email</span>
+          <a href={`mailto:${settings.contactEmail}`} class="contact-info-value">
+            {settings.contactEmail}
+          </a>
+        </div>
+
+        <div class="contact-info-item">
+          <span class="contact-info-label">Location</span>
+          <span class="contact-info-value">Oklahoma, USA</span>
+        </div>
+
+        <div class="contact-info-item">
+          <span class="contact-info-label">Social</span>
+          <div class="social-links">
+            <a href={settings.facebook}  target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href={settings.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href={settings.flickr}    target="_blank" rel="noopener noreferrer">Flickr</a>
+            <a href={settings.twitter}   target="_blank" rel="noopener noreferrer">X</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

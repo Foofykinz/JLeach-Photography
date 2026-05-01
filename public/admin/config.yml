@@ -1,0 +1,165 @@
+# ============================================================
+# Decap CMS Configuration — JLeach Photography
+# ============================================================
+# SETUP REQUIRED:
+#   1. Replace YOUR_GITHUB_USERNAME with your GitHub username
+#   2. Replace YOUR_REPO_NAME with the GitHub repository name
+#   3. Replace YOUR_OAUTH_WORKER_URL with your deployed OAuth Worker URL
+#      (see README.md for how to deploy the OAuth worker)
+# ============================================================
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  branch: main
+  base_url: https://YOUR_OAUTH_WORKER_URL
+  auth_endpoint: auth
+
+# Where uploaded images are stored in the repo
+media_folder: public/images/photos
+# The public URL path for those images
+public_folder: /images/photos
+
+# Simple mode = no draft/review workflow. Photos publish immediately on save.
+publish_mode: simple
+
+# ============================================================
+# Collections
+# ============================================================
+
+collections:
+  # ----------------------------------------------------------
+  # Gallery Photos
+  # ----------------------------------------------------------
+  - name: photos
+    label: Gallery Photos
+    label_singular: Photo
+    folder: src/content/photos
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields: ["order", "category", "title"]
+    view_groups:
+      - label: Category
+        field: category
+    fields:
+      - label: Photo
+        name: image
+        widget: image
+        hint: "Drag and drop your photo here, or click to browse. JPG or PNG recommended."
+        media_library:
+          config:
+            multiple: false
+
+      - label: Category
+        name: category
+        widget: select
+        hint: "Which section of the portfolio does this photo belong to?"
+        options:
+          - { label: "Portraits", value: portraits }
+          - { label: "Landscape", value: landscape }
+          - { label: "Storms", value: storms }
+          - { label: "Animals", value: animals }
+          - { label: "Vehicles", value: vehicles }
+
+      - label: Title
+        name: title
+        widget: string
+        required: false
+        hint: "Optional — a short name for this photo (only you see this in the admin)"
+
+      - label: Caption
+        name: caption
+        widget: string
+        required: false
+        hint: "Optional — text shown when a visitor opens this photo in the lightbox"
+
+      - label: Feature on About Page reel?
+        name: featured
+        widget: boolean
+        default: false
+        hint: "Turn this ON to include this photo in the scrolling photo reel on the About page"
+
+      - label: Sort Order
+        name: order
+        widget: number
+        default: 0
+        hint: "Lower numbers appear first. Use 1, 2, 3... to control order within a category."
+        value_type: int
+
+  # ----------------------------------------------------------
+  # About Page Content
+  # ----------------------------------------------------------
+  - name: about
+    label: About Page
+    files:
+      - label: About Page Content
+        name: about
+        file: src/content/about/about.md
+        fields:
+          - label: Headshot Photo
+            name: headshot
+            widget: image
+            required: false
+            hint: "Upload a photo of yourself — portrait orientation works best"
+
+          - label: Bio Text
+            name: body
+            widget: markdown
+            hint: "Your full biography. Write naturally — no HTML needed."
+
+          - label: Stats / Fun Facts
+            name: stats
+            widget: list
+            hint: "Fun numbers displayed in the dark band below your bio (e.g. '10+ Years Shooting'). Click 'Add stats' to add one."
+            fields:
+              - label: Label
+                name: label
+                widget: string
+                hint: "e.g. 'Years Shooting' or 'States Covered'"
+              - label: Value
+                name: value
+                widget: string
+                hint: "e.g. '10+' or '42'"
+
+  # ----------------------------------------------------------
+  # Site Settings
+  # ----------------------------------------------------------
+  - name: settings
+    label: Site Settings
+    files:
+      - label: Site Settings
+        name: settings
+        file: src/data/settings.json
+        fields:
+          - label: Homepage Tagline
+            name: tagline
+            widget: string
+            required: false
+            hint: "The large headline on the homepage hero section. Leave blank if you haven't decided yet."
+
+          - label: Contact Email
+            name: contactEmail
+            widget: string
+            hint: "Your public contact email address — shown on the Contact page"
+
+          - label: Facebook URL
+            name: facebook
+            widget: string
+            hint: "Paste your full Facebook page URL here"
+
+          - label: Instagram URL
+            name: instagram
+            widget: string
+            hint: "Paste your full Instagram profile URL here"
+
+          - label: Flickr URL
+            name: flickr
+            widget: string
+            hint: "Paste your full Flickr profile URL here"
+
+          - label: X (Twitter) URL
+            name: twitter
+            widget: string
+            hint: "Paste your full X (formerly Twitter) profile URL here"

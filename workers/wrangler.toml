@@ -1,0 +1,10 @@
+# Wrangler config for the two Cloudflare Workers
+# Deploy with: npx wrangler deploy workers/contact-form.js
+#              npx wrangler deploy workers/oauth.js
+
+[vars]
+# Non-secret variables can go here.
+# Secrets (API keys) are set via: npx wrangler secret put SECRET_NAME
+
+# Uncomment to set the account ID (you can find this in the Cloudflare dashboard)
+# account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"

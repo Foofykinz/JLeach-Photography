@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoGrid  from '../components/PhotoGrid.astro';
+import { getCollection } from 'astro:content';
+
+const photos = await getCollection('photos', ({ data }) => data.category === 'landscape');
+---
+
+<BaseLayout
+  title="Landscape"
+  description="Landscape photography by Joshua Leach — the beauty of wide-open spaces."
+>
+  <div class="category-page">
+    <div class="category-header">
+      <h1>Landscape</h1>
+      <p>The quiet beauty of wide-open spaces, golden hours, and open skies.</p>
+    </div>
+    <PhotoGrid photos={photos} />
+  </div>
+</BaseLayout>

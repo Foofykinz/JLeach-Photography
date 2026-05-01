@@ -1,0 +1,70 @@
+---
+import settings from '../data/settings.json';
+
+const navCategories = [
+  { label: 'Portraits',  href: '/portraits' },
+  { label: 'Landscape',  href: '/landscape' },
+  { label: 'Storms',     href: '/storms' },
+  { label: 'Animals',    href: '/animals' },
+  { label: 'Vehicles',   href: '/vehicles' },
+];
+
+const navPages = [
+  { label: 'About',   href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <a href="/" class="logo-link">
+        <span class="logo-name">JLeach Photography</span>
+        <span class="logo-sub">Joshua Leach</span>
+      </a>
+    </div>
+
+    <!-- Portfolio Nav -->
+    <nav class="sidebar-nav" aria-label="Portfolio">
+      <span class="nav-section-label">Portfolio</span>
+      <ul>
+        {navCategories.map(({ label, href }) => (
+          <li>
+            <a href={href} class={currentPath === href ? 'active' : ''}>{label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Pages Nav -->
+    <nav class="sidebar-nav" aria-label="Pages">
+      <span class="nav-section-label">Pages</span>
+      <ul>
+        {navPages.map(({ label, href }) => (
+          <li>
+            <a href={href} class={currentPath === href ? 'active' : ''}>{label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Footer: Socials + CTA -->
+    <div class="sidebar-footer">
+      <div class="social-links">
+        <a href={settings.facebook}  target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href={settings.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href={settings.flickr}    target="_blank" rel="noopener noreferrer">Flickr</a>
+        <a href={settings.twitter}   target="_blank" rel="noopener noreferrer">X</a>
+      </div>
+      <a href="/contact" class="btn btn-dark" style="width:100%; display:block;">Get in Touch</a>
+    </div>
+
+  </div>
+</aside>
+
+<!-- Tap-outside overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>

@@ -1,0 +1,19 @@
+---
+import settings from '../data/settings.json';
+
+const tagline = settings.tagline?.trim();
+---
+
+<section class="hero">
+  <span class="hero-location">Based in Oklahoma</span>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Photography by Joshua Leach</p>
+
+    {tagline ? (
+      <h1 class="hero-tagline">{tagline}</h1>
+    ) : (
+      /* PLACEHOLDER — Josh: log in to /admin → Site Settings → Homepage Tagline to add your tagline */
+      <p class="hero-tagline-placeholder">Your tagline goes here — add it in Site Settings</p>
+    )}
+  </div>
+</section>

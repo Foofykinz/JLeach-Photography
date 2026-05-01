@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PhotoGrid  from '../components/PhotoGrid.astro';
+import { getCollection } from 'astro:content';
+
+const photos = await getCollection('photos', ({ data }) => data.category === 'vehicles');
+---
+
+<BaseLayout
+  title="Vehicles"
+  description="Vehicle photography by Joshua Leach — form, function, and motion."
+>
+  <div class="category-page">
+    <div class="category-header">
+      <h1>Vehicles</h1>
+      <p>Form, function, and motion — from classic cars to working machines.</p>
+    </div>
+    <PhotoGrid photos={photos} />
+  </div>
+</BaseLayout>

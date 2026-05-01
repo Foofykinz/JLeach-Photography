@@ -1,0 +1,21 @@
+# Build output
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment / secrets (NEVER commit these)
+.env
+.env.*
+.dev.vars
+wrangler.toml.local
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
