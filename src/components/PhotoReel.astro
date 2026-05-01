@@ -6,13 +6,15 @@ const featured   = allPhotos
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 
-// Duplicate the array so the CSS loop appears seamless
+// Duplicate array so the CSS animation loops seamlessly
 const reelPhotos = [...featured, ...featured];
+const hasPhotos  = featured.length > 0;
 ---
 
-{featured.length > 0 && (
-  <section class="photo-reel-section" aria-label="Featured photos reel">
-    <p class="photo-reel-label">Featured Work</p>
+<section class="photo-reel-section" aria-label="Featured photos">
+  <p class="photo-reel-label">Featured Work</p>
+
+  {hasPhotos ? (
     <div class="reel-track" aria-hidden="true">
       {reelPhotos.map((photo, i) => (
         <div class="reel-item" key={i}>
@@ -25,5 +27,9 @@ const reelPhotos = [...featured, ...featured];
         </div>
       ))}
     </div>
-  </section>
-)}
+  ) : (
+    <p class="reel-empty">
+      Photos will appear here once added — mark any photo as "Featured" in the admin panel to include it.
+    </p>
+  )}
+</section>

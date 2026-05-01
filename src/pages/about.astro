@@ -9,7 +9,6 @@ const about        = aboutEntries[0];
 const { Content }  = about ? await about.render() : { Content: null };
 
 const headshot = about?.data.headshot?.trim() || '';
-const stats    = about?.data.stats ?? [];
 ---
 
 <BaseLayout
@@ -18,7 +17,7 @@ const stats    = about?.data.stats ?? [];
 >
   <div class="about-page">
 
-    <!-- Section 1: Headshot + Bio -->
+    <!-- Headshot + Bio -->
     <div class="about-intro">
       <div class="about-photo-col">
         {headshot ? (
@@ -64,18 +63,6 @@ const stats    = about?.data.stats ?? [];
     </div>
   </div>
 
-  <!-- Section 2: Stats row (full bleed, dark background) -->
-  {stats.length > 0 && (
-    <div class="stats-row">
-      {stats.map(({ label, value }) => (
-        <div class="stat-item">
-          <div class="stat-value">{value}</div>
-          <div class="stat-label">{label}</div>
-        </div>
-      ))}
-    </div>
-  )}
-
-  <!-- Section 3: Featured photo reel -->
+  <!-- Featured photo reel (full bleed) -->
   <PhotoReel />
 </BaseLayout>

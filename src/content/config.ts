@@ -16,15 +16,6 @@ const about = defineCollection({
   type: 'content',
   schema: z.object({
     headshot: z.string().optional(),
-    stats: z
-      .array(
-        z.object({
-          label: z.string(),
-          value: z.string(),
-        })
-      )
-      .optional()
-      .default([]),
   }),
 });
 
