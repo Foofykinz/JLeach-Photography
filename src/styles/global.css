@@ -1,5 +1,5 @@
 /* Font imports — loaded directly in CSS for self-contained styling */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Oswald:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
 
 /* ============================================================
    JLeach Photography — Global Styles
@@ -25,8 +25,12 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Typography */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-accent:  'Cormorant Garamond', Georgia, serif; /* italic only — eyebrows, taglines, captions */
   --font-body:    'Jost', system-ui, sans-serif;
+
+  /* Accent — amber/bronze, used sparingly on decorative details */
+  --color-vivid: #b8763a;
 
   /* Layout */
   --sidebar-width: 220px;
@@ -45,7 +49,7 @@ html {
 }
 body {
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-primary);
   background: var(--color-bg);
   line-height: 1.6;
@@ -102,16 +106,18 @@ main {
 
 .logo-name {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .logo-sub {
   font-family: var(--font-body);
   font-size: 0.58rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--color-text-faint);
@@ -137,7 +143,7 @@ main {
 .sidebar-nav ul li a {
   display: block;
   font-size: 0.86rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-mid);
   padding: 0.4rem 0 0.4rem 1rem;
   position: relative;
@@ -183,7 +189,7 @@ main {
 
 .social-links a {
   font-size: 0.78rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   transition: color 0.2s var(--ease-out);
 }
@@ -215,8 +221,8 @@ main {
 }
 
 .btn-dark:hover {
-  background: var(--color-text-mid);
-  border-color: var(--color-text-mid);
+  background: var(--color-vivid);
+  border-color: var(--color-vivid);
 }
 
 .btn-outline {
@@ -251,10 +257,11 @@ main {
 
 .topbar-logo {
   font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.1rem;
-  font-weight: 300;
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--color-text-primary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .topbar-nav {
@@ -264,7 +271,7 @@ main {
 
 .topbar-nav a {
   font-size: 0.8rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.06em;
   color: var(--color-text-mid);
   transition: color 0.2s var(--ease-out);
@@ -338,25 +345,38 @@ main {
   mix-blend-mode: overlay;
 }
 
+/* Bottom fade — dissolves the dark hero into the gallery section below */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 260px;
+  background: linear-gradient(to bottom, transparent 0%, var(--color-bg-muted) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 .hero-location {
   position: absolute;
   top: 2.25rem;
   right: 2.25rem;
   font-size: 0.65rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: rgba(168, 160, 151, 0.55);
   border: 1px solid rgba(168, 160, 151, 0.18);
   padding: 0.45rem 1rem;
   border-radius: 2px;
-  z-index: 2;
+  z-index: 3;
 }
 
 .hero-inner {
   max-width: 750px;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Eyebrow with decorative trailing line */
@@ -365,7 +385,7 @@ main {
   align-items: center;
   gap: 0.85rem;
   font-size: 0.7rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(168, 160, 151, 0.7);
@@ -384,25 +404,306 @@ main {
 
 .hero-tagline {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 5vw, 4.5rem);
-  font-weight: 300;
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-weight: 700;
   color: var(--color-light);
-  line-height: 1.08;
-  max-width: 680px;
-  letter-spacing: -0.01em;
+  line-height: 1.0;
+  max-width: 780px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .hero-tagline-placeholder {
   font-family: var(--font-display);
-  font-style: italic;
   font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 300;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: rgba(245, 242, 238, 0.18);
   line-height: 1.25;
   max-width: 680px;
   border: 1px dashed rgba(168, 160, 151, 0.18);
   padding: 1.75rem 2.25rem;
   border-radius: 2px;
+}
+
+/* --- Split Hero --------------------------------------------*/
+.split-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  min-height: 62vh;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.split-hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 4rem;
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint "JL" monogram watermark — adds depth to the otherwise plain panel */
+.split-hero-text::before {
+  content: 'JL';
+  position: absolute;
+  right: -0.1em;
+  bottom: -0.2em;
+  font-family: var(--font-display);
+  font-size: 20rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--color-text-primary);
+  opacity: 0.028;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Eyebrow uses italic Cormorant — elegant contrast against the heavy Oswald name */
+.split-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.split-hero-eyebrow::after {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  background: var(--color-vivid);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.split-hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 6.5vw, 6rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 0.92;
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.25rem;
+}
+
+/* Amber rule — the only pop of color on the page */
+.split-hero-rule {
+  width: 3rem;
+  height: 2px;
+  background: var(--color-vivid);
+  margin-bottom: 1.75rem;
+}
+
+/* Tagline uses italic Cormorant — feels like a caption, not a headline */
+.split-hero-tagline {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--color-text-mid);
+  max-width: 360px;
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+
+.split-hero-tagline--muted {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-text-faint);
+}
+
+.split-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.split-hero-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--color-text-mid);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-border);
+  transition: gap 0.3s var(--ease-out), color 0.2s, border-color 0.2s;
+}
+
+.split-hero-link:hover {
+  gap: 0.7rem;
+  color: var(--color-text-primary);
+  border-color: var(--color-vivid);
+}
+
+/* Photo side — storm-sky gradient as placeholder until hero.jpg is dropped in */
+.split-hero-photo {
+  position: relative;
+  background:
+    linear-gradient(160deg, #1a3347 0%, #0d1f2d 55%, #162030 100%);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Left-edge light bleed so photo transitions into text panel */
+.split-hero-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(245, 242, 238, 0.14) 0%, transparent 20%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.split-hero-location {
+  position: absolute;
+  bottom: 1.75rem;
+  right: 1.75rem;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(245, 242, 238, 0.65);
+  background: rgba(30, 46, 58, 0.45);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(245, 242, 238, 0.15);
+  padding: 0.4rem 0.85rem;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+/* Placeholder state — shown when no hero.jpg exists yet */
+.split-hero-photo:not([style*="hero.jpg"])::after,
+.split-hero-photo[style*="url('')"]::after {
+  content: 'Add hero.jpg to /public/images/';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 900px) {
+  .split-hero {
+    grid-template-columns: 1fr 1fr;
+  }
+  .split-hero-text {
+    padding: 4rem 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Collapse into a single overlay block — photo fills, text sits on top */
+  .split-hero {
+    display: block;
+    position: relative;
+    min-height: 50vh;
+  }
+  .split-hero-photo {
+    position: absolute;
+    inset: 0;
+  }
+  /* Swap the left-edge bleed for a full dark overlay so text is readable */
+  .split-hero-photo::before {
+    background: rgba(20, 35, 46, 0.58);
+  }
+  .split-hero-text {
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    border-right: none;
+    border-top: none;
+    padding: 3.5rem 1.75rem;
+    min-height: 50vh;
+    justify-content: center;
+  }
+  /* Flip all text to light since it's now over a dark photo */
+  .split-hero-eyebrow         { color: rgba(245, 242, 238, 0.55); }
+  .split-hero-name            { color: var(--color-light); }
+  .split-hero-rule            { background: rgba(245, 242, 238, 0.2); }
+  .split-hero-tagline         { color: rgba(245, 242, 238, 0.7); }
+  .split-hero-tagline--muted  { color: rgba(245, 242, 238, 0.45); }
+  .split-hero-link            { color: rgba(245, 242, 238, 0.65); border-color: rgba(245, 242, 238, 0.2); }
+  .split-hero-link:hover      { color: var(--color-light); border-color: rgba(245, 242, 238, 0.45); }
+  .split-hero-location        { bottom: 1rem; right: 1rem; }
+}
+
+/* --- Home Intro --------------------------------------------*/
+.home-intro {
+  padding: 5rem 3rem 4rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.home-intro-inner {
+  max-width: 860px;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: 1rem;
+}
+
+.home-eyebrow::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.home-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  color: var(--color-text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.home-tagline {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  max-width: 480px;
+  line-height: 1.6;
 }
 
 /* --- Gallery Grid (Homepage) --------------------------------*/
@@ -461,20 +762,23 @@ main {
 
 .category-card-name {
   font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 300;
+  font-size: 1.8rem;
+  font-weight: 700;
   color: var(--color-light);
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Description hidden by default — fades + slides up on hover */
 .category-card-desc {
-  font-size: 0.75rem;
-  font-weight: 300;
-  color: rgba(245, 242, 238, 0.65);
-  margin-top: 0.4rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: rgba(245, 242, 238, 0.72);
+  margin-top: 0.5rem;
+  letter-spacing: 0;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
@@ -516,7 +820,7 @@ main {
 
 .bio-card p {
   font-size: 0.9rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.8;
   color: var(--color-text-mid);
   margin-bottom: 1.75rem;
@@ -543,14 +847,15 @@ main {
 .bio-card-info h3 {
   font-family: var(--font-display);
   font-size: 1.75rem;
-  font-weight: 300;
+  font-weight: 700;
   margin-bottom: 0.3rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .bio-card-info .location {
   font-size: 0.68rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -559,7 +864,7 @@ main {
 
 .bio-card-info .contact-email {
   font-size: 0.84rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
   display: block;
@@ -590,16 +895,17 @@ main {
 .category-header h1 {
   font-family: var(--font-display);
   font-size: 3.5rem;
-  font-weight: 300;
+  font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1;
   margin-bottom: 0.65rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .category-header p {
   font-size: 0.87rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   max-width: 480px;
   letter-spacing: 0.02em;
@@ -637,7 +943,7 @@ main {
   text-align: center;
   color: var(--color-text-faint);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.9rem;
 }
 
@@ -674,7 +980,7 @@ main {
   justify-content: center;
   color: var(--color-text-faint);
   font-size: 0.8rem;
-  font-weight: 300;
+  font-weight: 400;
   text-align: center;
   padding: 1rem;
 }
@@ -682,24 +988,27 @@ main {
 .about-bio h1 {
   font-family: var(--font-display);
   font-size: 3rem;
-  font-weight: 300;
+  font-weight: 700;
   line-height: 1;
   margin-bottom: 0.4rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .about-subtitle {
-  font-size: 0.68rem;
-  font-weight: 300;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--color-text-muted);
   margin-bottom: 2.25rem;
 }
 
 .about-bio-text {
   font-size: 0.93rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.9;
   color: var(--color-text-mid);
   margin-bottom: 2.25rem;
@@ -739,16 +1048,16 @@ main {
 .stat-value {
   font-family: var(--font-display);
   font-size: 3.5rem;
-  font-weight: 300;
+  font-weight: 700;
   color: var(--color-light);
   line-height: 1;
   margin-bottom: 0.6rem;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
 }
 
 .stat-label {
   font-size: 0.65rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: rgba(168, 160, 151, 0.6);
@@ -800,7 +1109,7 @@ main {
   padding: 2rem 3rem 0.5rem;
   color: var(--color-text-faint);
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.85rem;
 }
 
@@ -817,14 +1126,15 @@ main {
 .contact-page h1 {
   font-family: var(--font-display);
   font-size: 3rem;
-  font-weight: 300;
+  font-weight: 700;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .page-sub {
   font-size: 0.88rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   margin-bottom: 3.5rem;
 }
@@ -860,7 +1170,7 @@ main {
 .form-group input,
 .form-group textarea {
   font-size: 0.9rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-primary);
   background: var(--color-bg-muted);
   border: 1px solid var(--color-border);
@@ -883,13 +1193,13 @@ main {
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   font-style: italic;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-faint);
 }
 
 .form-status {
   font-size: 0.85rem;
-  font-weight: 300;
+  font-weight: 400;
   padding: 0.8rem 1rem;
   border-radius: 2px;
   display: none;
@@ -911,10 +1221,11 @@ main {
 
 .contact-info h3 {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 300;
+  font-size: 1.4rem;
+  font-weight: 700;
   margin-bottom: 1.75rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .contact-info-item {
@@ -934,7 +1245,7 @@ main {
 
 .contact-info-value {
   font-size: 0.87rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-mid);
   transition: color 0.2s var(--ease-out);
 }
@@ -961,7 +1272,8 @@ main {
 .error-number {
   font-family: var(--font-display);
   font-size: 10rem;
-  font-weight: 300;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   color: var(--color-border);
   line-height: 1;
   margin-bottom: 0.5rem;
@@ -971,13 +1283,15 @@ main {
 .page-404 h1 {
   font-family: var(--font-display);
   font-size: 2rem;
-  font-weight: 300;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: 0.75rem;
 }
 
 .page-404 p {
   color: var(--color-text-muted);
-  font-weight: 300;
+  font-weight: 400;
   margin-bottom: 2.5rem;
   font-size: 0.9rem;
 }

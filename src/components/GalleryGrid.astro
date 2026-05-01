@@ -1,49 +1,45 @@
 ---
+import { getCollection } from 'astro:content';
+
+const allPhotos = await getCollection('photos');
+
 const categories = [
-  {
-    name:  'Portraits',
-    slug:  'portraits',
-    desc:  'Capturing personality and emotion',
-  },
-  {
-    name:  'Landscape',
-    slug:  'landscape',
-    desc:  'The beauty of wide-open spaces',
-  },
-  {
-    name:  'Storms',
-    slug:  'storms',
-    desc:  "Nature's most powerful moments",
-  },
-  {
-    name:  'Animals',
-    slug:  'animals',
-    desc:  'Wildlife in its natural habitat',
-  },
-  {
-    name:  'Vehicles',
-    slug:  'vehicles',
-    desc:  'Form, function, and motion',
-  },
+  { name: 'Portraits', slug: 'portraits', desc: 'Capturing personality and emotion' },
+  { name: 'Landscape', slug: 'landscape', desc: 'The beauty of wide-open spaces' },
+  { name: 'Storms',    slug: 'storms',    desc: "Nature's most powerful moments" },
+  { name: 'Animals',   slug: 'animals',   desc: 'Wildlife in its natural habitat' },
+  { name: 'Vehicles',  slug: 'vehicles',  desc: 'Form, function, and motion' },
 ];
+
+// Pick the lowest-order photo per category as the card cover.
+// Falls back to null (dark placeholder) if no photos exist yet for that category.
+function getCover(slug: string): string | null {
+  const match = allPhotos
+    .filter(p => p.data.category === slug)
+    .sort((a, b) => a.data.order - b.data.order);
+  return match[0]?.data.image ?? null;
+}
 ---
 
 <section class="gallery-grid-section">
   <p class="gallery-grid-section-title">Portfolio</p>
   <div class="gallery-grid">
-    {categories.map(({ name, slug, desc }) => (
-      <a href={`/${slug}`} class="category-card">
-        <!-- Cover image: place a file at /public/images/covers/{slug}.jpg to set a background -->
-        <div
-          class="category-card-bg"
-          style={`background-image: url('/images/covers/${slug}.jpg')`}
-        />
-        <div class="category-card-overlay">
-          <h3 class="category-card-name">{name}</h3>
-          <p class="category-card-desc">{desc}</p>
-        </div>
-      </a>
-    ))}
+
+    {categories.map(({ name, slug, desc }) => {
+      const cover = getCover(slug);
+      return (
+        <a href={`/${slug}`} class="category-card">
+          <div
+            class="category-card-bg"
+            style={cover ? `background-image: url('${cover}')` : ''}
+          />
+          <div class="category-card-overlay">
+            <h3 class="category-card-name">{name}</h3>
+            <p class="category-card-desc">{desc}</p>
+          </div>
+        </a>
+      );
+    })}
 
     <!-- Filler card -->
     <div class="category-card category-card-filler" aria-hidden="true">
@@ -53,5 +49,6 @@ const categories = [
         <p class="category-card-desc">More coming soon</p>
       </div>
     </div>
+
   </div>
 </section>

@@ -1,16 +1,45 @@
 ---
 import BaseLayout  from '../layouts/BaseLayout.astro';
-import Hero        from '../components/Hero.astro';
 import GalleryGrid from '../components/GalleryGrid.astro';
 import settings    from '../data/settings.json';
+
+const tagline = settings.tagline?.trim();
 ---
 
 <BaseLayout
   title="JLeach Photography"
   description="Photography portfolio of Joshua Leach — portraits, landscapes, storms, animals, and vehicles."
 >
-  <!-- Hero: full-height, dark -->
-  <Hero />
+  <!-- Split hero: text left, photo right -->
+  <div class="split-hero">
+
+    <div class="split-hero-text">
+      <p class="split-hero-eyebrow">Photographer · Oklahoma</p>
+      <h1 class="split-hero-name">
+        <span>Joshua</span>
+        <span>Leach</span>
+      </h1>
+      <div class="split-hero-rule"></div>
+      {tagline && <p class="split-hero-tagline">{tagline}</p>}
+      <div class="split-hero-actions">
+        <a href="/storms" class="btn btn-dark">View Portfolio</a>
+        <a href="/about" class="split-hero-link">About Josh <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <!--
+      PHOTO: drop a file at /public/images/hero.jpg to set the right-side image.
+      Portrait or square orientation works best — a dramatic storm or landscape shot.
+    -->
+    <div
+      class="split-hero-photo"
+      style="background-image: url('/images/hero.jpg')"
+      role="img"
+      aria-label="Hero photo by Joshua Leach"
+    >
+    </div>
+
+  </div>
 
   <!-- 3-column category grid -->
   <GalleryGrid />
@@ -18,7 +47,6 @@ import settings    from '../data/settings.json';
   <!-- Bio strip -->
   <section class="bio-strip">
     <div class="bio-strip-grid">
-      <!-- Left: short bio excerpt -->
       <div class="bio-card">
         <p>
           Hello all! I'm Josh, born and raised in Illinois, now living in Oklahoma.
@@ -28,7 +56,6 @@ import settings    from '../data/settings.json';
         <a href="/about" class="read-more">Read more <span aria-hidden="true">→</span></a>
       </div>
 
-      <!-- Right: contact info + socials -->
       <div class="bio-card bio-card-info">
         <h3>Joshua Leach</h3>
         <p class="location">Oklahoma</p>
