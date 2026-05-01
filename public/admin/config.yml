@@ -1,27 +1,21 @@
 # ============================================================
 # Decap CMS Configuration — JLeach Photography
-# ============================================================
-# SETUP REQUIRED:
-#   1. Replace YOUR_GITHUB_USERNAME with your GitHub username
-#   2. Replace YOUR_REPO_NAME with the GitHub repository name
-#   3. Replace YOUR_OAUTH_WORKER_URL with your deployed OAuth Worker URL
-#      (see README.md for how to deploy the OAuth worker)
+# Hosted on Netlify with Netlify Identity + Git Gateway auth
 # ============================================================
 
 backend:
-  name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  name: git-gateway
   branch: main
-  base_url: https://jleach-oauth.alysonwalters22.workers.dev
-  auth_endpoint: auth
+
+publish_mode: simple
+
+site_url: https://www.jleachphotography.com
+display_url: https://www.jleachphotography.com
 
 # Where uploaded images are stored in the repo
-media_folder: public/images/photos
+media_folder: public/images/uploads
 # The public URL path for those images
-public_folder: /images/photos
-
-# Simple mode = no draft/review workflow. Photos publish immediately on save.
-publish_mode: simple
+public_folder: /images/uploads
 
 # ============================================================
 # Collections
@@ -109,20 +103,6 @@ collections:
             widget: markdown
             hint: "Your full biography. Write naturally — no HTML needed."
 
-          - label: Stats / Fun Facts
-            name: stats
-            widget: list
-            hint: "Fun numbers displayed in the dark band below your bio (e.g. '10+ Years Shooting'). Click 'Add stats' to add one."
-            fields:
-              - label: Label
-                name: label
-                widget: string
-                hint: "e.g. 'Years Shooting' or 'States Covered'"
-              - label: Value
-                name: value
-                widget: string
-                hint: "e.g. '10+' or '42'"
-
   # ----------------------------------------------------------
   # Site Settings
   # ----------------------------------------------------------
@@ -137,7 +117,7 @@ collections:
             name: tagline
             widget: string
             required: false
-            hint: "The large headline on the homepage hero section. Leave blank if you haven't decided yet."
+            hint: "The italic line shown beneath your name on the homepage. Leave blank to hide it."
 
           - label: Contact Email
             name: contactEmail
