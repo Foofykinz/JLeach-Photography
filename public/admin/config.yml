@@ -1,10 +1,11 @@
 # ============================================================
 # Decap CMS Configuration — JLeach Photography
-# Hosted on Netlify with Netlify Identity + Git Gateway auth
+# Hosted on Cloudflare Pages — auth handled by Cloudflare Access
 # ============================================================
 
 backend:
-  name: git-gateway
+  name: github
+  repo: Foofykinz/JLeach-Photography
   branch: main
 
 publish_mode: simple
