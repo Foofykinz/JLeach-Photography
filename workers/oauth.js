@@ -5,8 +5,8 @@
  *   1. CMS opens popup → /auth → GitHub OAuth page
  *   2. GitHub redirects back → /callback?code=xxx
  *   3. Worker exchanges code for token
- *   4. Worker redirects popup to /admin/#access_token=xxx
- *   5. admin/index.html picks up the hash and posts the token to the opener
+ *   4. Worker redirects popup to /callback.html#access_token=xxx
+ *   5. callback.html reads the hash and postMessages the token to the opener (admin window)
  *
  * Required Worker secrets:
  *   GITHUB_CLIENT_ID
@@ -70,8 +70,8 @@ export default {
         return errorPage(tokenData.error_description ?? tokenData.error ?? 'no_access_token');
       }
 
-      // Redirect the popup to /admin/#access_token=xxx
-      // admin/index.html picks this up and posts it to the opener window
+      // Redirect the popup to /callback.html#access_token=xxx
+      // callback.html reads the hash and postMessages the token back to the opener
       return Response.redirect(
         `https://jleachphotography.com/callback.html#access_token=${tokenData.access_token}`,
         302

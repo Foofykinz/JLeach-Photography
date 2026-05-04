@@ -1,16 +1,78 @@
 <!DOCTYPE html>
 <html>
-  <head><meta charset="utf-8" /><title>Authenticating...</title></head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Authenticating...</title>
+    <style>
+      body { font-family: monospace; padding: 2rem; background: #f5f2ee; color: #1e2e3a; }
+      .ok  { color: green; }
+      .err { color: red; font-weight: bold; }
+    </style>
+  </head>
   <body>
+    <p><strong>OAuth Callback Debug</strong></p>
+    <div id="log"></div>
+
     <script>
-      var token = new URLSearchParams(window.location.hash.slice(1)).get('access_token');
-      if (token && window.opener) {
-        window.opener.postMessage(
-          'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' }),
-          '*'
-        );
+      function log(msg, type) {
+        console.log('[callback.html]', msg);
+        var el = document.createElement('p');
+        el.className = type || '';
+        el.textContent = msg;
+        document.getElementById('log').appendChild(el);
       }
-      setTimeout(function() { window.close(); }, 1000);
+
+      // ── 1. Check the hash ────────────────────────────────────────────────────
+      var rawHash = window.location.hash;
+      log('window.location.hash = "' + rawHash + '"');
+
+      var params = new URLSearchParams(rawHash.slice(1));
+      var token  = params.get('access_token');
+
+      if (token) {
+        log('Token found: ' + token.slice(0, 12) + '... (' + token.length + ' chars)', 'ok');
+      } else {
+        log('ERROR: No access_token in hash', 'err');
+        log('All hash params: ' + rawHash);
+      }
+
+      // ── 2. Check window.opener ───────────────────────────────────────────────
+      log('window.opener = ' + (window.opener ? 'EXISTS' : 'NULL'));
+      if (window.opener) {
+        try {
+          log('window.opener.location.href = ' + window.opener.location.href);
+        } catch (e) {
+          log('window.opener exists but cannot read href (cross-origin) — that is fine', 'ok');
+        }
+      } else {
+        log('ERROR: window.opener is null — postMessage cannot be sent', 'err');
+        log('This means the popup lost its opener reference during navigation', 'err');
+      }
+
+      // ── 3. Send postMessage ──────────────────────────────────────────────────
+      if (token && window.opener) {
+        // Exact format Decap CMS expects for external OAuth providers
+        var message = 'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' });
+        log('Sending postMessage: ' + message.slice(0, 80) + '...');
+        try {
+          window.opener.postMessage(message, '*');
+          log('postMessage sent OK', 'ok');
+        } catch (e) {
+          log('ERROR sending postMessage: ' + e.message, 'err');
+        }
+      }
+
+      // ── 4. Close after 10s so you can read this console ─────────────────────
+      log('Window will close in 10 seconds...');
+      var countdown = 10;
+      var timer = setInterval(function() {
+        countdown--;
+        log('Closing in ' + countdown + 's...');
+        if (countdown <= 0) {
+          clearInterval(timer);
+          window.close();
+        }
+      }, 1000);
     </script>
   </body>
 </html>
