@@ -4,21 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLeach Photography — Admin</title>
+    <script>
+      // Grab token before Decap clears the hash
+      var hash = window.location.hash;
+      if (hash && hash.includes('access_token')) {
+        var token = new URLSearchParams(hash.slice(1)).get('access_token');
+        if (token) {
+          sessionStorage.setItem('github_token', token);
+          window.location.hash = '';
+        }
+      }
+      var stored = sessionStorage.getItem('github_token');
+      if (stored) {
+        sessionStorage.removeItem('github_token');
+        window.postMessage(
+          'authorization:github:success:' + JSON.stringify({ token: stored, provider: 'github' }),
+          '*'
+        );
+      }
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
-    <script>
-      if (window.location.hash && window.location.hash.includes('access_token')) {
-        var token = new URLSearchParams(window.location.hash.slice(1)).get('access_token');
-        if (token && window.opener) {
-          window.opener.postMessage(
-            'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' }),
-            '*'
-          );
-          window.close();
-        }
-      }
-    </script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
