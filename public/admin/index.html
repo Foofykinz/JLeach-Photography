@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLeach Photography — Admin</title>
     <script>
-      // Grab token before Decap clears the hash
-      var hash = window.location.hash;
-      if (hash && hash.includes('access_token')) {
-        var token = new URLSearchParams(hash.slice(1)).get('access_token');
-        if (token) {
-          sessionStorage.setItem('github_token', token);
-          window.location.hash = '';
-        }
-      }
-      var stored = sessionStorage.getItem('github_token');
-      if (stored) {
-        sessionStorage.removeItem('github_token');
-        window.postMessage(
-          'authorization:github:success:' + JSON.stringify({ token: stored, provider: 'github' }),
-          '*'
-        );
-      }
+      // DEBUG: log every incoming postMessage so we can see if callback.html is reaching us
+      window.addEventListener('message', function(e) {
+        console.log('[admin] MESSAGE RECEIVED', {
+          origin: e.origin,
+          data:   e.data,
+          source: e.source ? 'exists' : 'null'
+        });
+      });
     </script>
   </head>
   <body>
