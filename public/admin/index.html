@@ -5,35 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLeach Photography — Admin</title>
     <script>
-      // Log every message received
+      // Intercept addEventListener/removeEventListener on window
+      // so we can see exactly when Decap registers (or removes) its message handler
+      var _add = EventTarget.prototype.addEventListener;
+      var _rem = EventTarget.prototype.removeEventListener;
+
+      EventTarget.prototype.addEventListener = function(type, fn, opts) {
+        if (this === window && type === 'message') {
+          console.log('[admin] +addEventListener(message)', new Error().stack.split('\n')[2] || '');
+        }
+        return _add.call(this, type, fn, opts);
+      };
+
+      EventTarget.prototype.removeEventListener = function(type, fn, opts) {
+        if (this === window && type === 'message') {
+          console.log('[admin] -removeEventListener(message)', new Error().stack.split('\n')[2] || '');
+        }
+        return _rem.call(this, type, fn, opts);
+      };
+
+      // Also log incoming messages and errors
       window.addEventListener('message', function(e) {
         console.log('[admin] MESSAGE origin=' + e.origin + ' data=' + String(e.data).slice(0, 120));
       });
-
-      // Catch unhandled JS errors
-      window.addEventListener('error', function(e) {
-        console.log('[admin] JS ERROR:', e.message, 'at', e.filename + ':' + e.lineno);
-      });
-
-      // Catch unhandled promise rejections (Decap uses promises for API calls)
       window.addEventListener('unhandledrejection', function(e) {
         console.log('[admin] UNHANDLED REJECTION:', e.reason);
       });
-
-      // Intercept all fetch calls so we can see what GitHub API calls Decap makes
-      // and whether they succeed or fail
-      var _fetch = window.fetch;
-      window.fetch = function(input, init) {
-        var url = typeof input === 'string' ? input : (input.url || input);
-        console.log('[admin] FETCH ->', url);
-        return _fetch.apply(this, arguments).then(function(res) {
-          console.log('[admin] FETCH <-', url, res.status, res.ok ? 'OK' : 'FAIL');
-          return res;
-        }).catch(function(err) {
-          console.log('[admin] FETCH ERR', url, err.message);
-          throw err;
-        });
-      };
     </script>
   </head>
   <body>
