@@ -3,7 +3,8 @@ import BaseLayout  from '../layouts/BaseLayout.astro';
 import GalleryGrid from '../components/GalleryGrid.astro';
 import settings    from '../data/settings.json';
 
-const tagline = settings.tagline?.trim();
+const tagline    = settings.tagline?.trim();
+const heroImage  = settings.heroImage?.trim();
 ---
 
 <BaseLayout
@@ -33,7 +34,7 @@ const tagline = settings.tagline?.trim();
     -->
     <div
       class="split-hero-photo"
-      style="background-image: url('/images/hero.jpg')"
+      style={heroImage ? `background-image: url('${heroImage}')` : ''}
       role="img"
       aria-label="Hero photo by Joshua Leach"
     >

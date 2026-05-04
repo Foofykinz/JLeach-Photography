@@ -114,6 +114,12 @@ collections:
         name: settings
         file: src/data/settings.json
         fields:
+          - label: Homepage Hero Photo
+            name: heroImage
+            widget: image
+            required: false
+            hint: "The large photo on the right side of the homepage. Portrait or landscape orientation works best — pick your most dramatic shot."
+
           - label: Homepage Tagline
             name: tagline
             widget: string
