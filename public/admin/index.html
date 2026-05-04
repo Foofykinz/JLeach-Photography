@@ -9,20 +9,9 @@
     <div id="nc-root"></div>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
-      // Poll sessionStorage for a token deposited by callback.html.
-      // When found, post to THIS window — Decap's listener is same-window
-      // and will always receive it, bypassing cross-window origin checks.
-      var poll = setInterval(function () {
-        var payload = sessionStorage.getItem('oauth_token');
-        if (!payload) return;
-
-        clearInterval(poll);
-        sessionStorage.removeItem('oauth_token');
-
-        var msg = 'authorization:github:success:' + payload;
-        console.log('[admin] OAuth token received, posting to Decap:', msg.slice(0, 80));
-        window.postMessage(msg, window.location.origin);
-      }, 200);
+      window.addEventListener('message', function(e) {
+        console.log('[admin] MESSAGE RECEIVED origin=' + e.origin + ' data=' + String(e.data).slice(0, 100));
+      });
     </script>
   </body>
 </html>

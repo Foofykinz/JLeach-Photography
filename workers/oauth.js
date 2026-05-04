@@ -72,15 +72,52 @@ export default {
 
       // Redirect the popup to /callback.html#access_token=xxx
       // callback.html reads the hash and postMessages the token back to the opener
-      return Response.redirect(
-        `https://jleachphotography.com/callback.html#access_token=${tokenData.access_token}`,
-        302
-      );
+      return popupResponse(tokenData.access_token);
     }
 
     return new Response('Not found', { status: 404 });
   },
 };
+
+function popupResponse(token) {
+  const msg = `authorization:github:success:${JSON.stringify({ token, provider: 'github' })}`;
+
+  return new Response(`<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Authenticating...</title></head>
+<body style="font-family:monospace;padding:2rem;background:#f5f2ee">
+<p id="s">Sending token to CMS...</p>
+<script>
+  var log = function(t) {
+    console.log('[oauth-popup]', t);
+    document.getElementById('s').innerHTML += '<br>' + t;
+  };
+
+  var msg = ${JSON.stringify(msg)};
+  log('origin: ' + window.location.origin);
+  log('window.opener: ' + (window.opener ? 'EXISTS' : 'NULL'));
+
+  if (window.opener) {
+    try {
+      window.opener.postMessage(msg, '*');
+      log('postMessage sent OK');
+    } catch(e) {
+      log('ERROR: ' + e.message);
+    }
+  } else {
+    log('CANNOT SEND — opener is null');
+  }
+
+  // Keep open 30s so you can read this console, then close
+  var n = 30;
+  var t = setInterval(function() {
+    log('closing in ' + (--n) + 's');
+    if (n <= 0) { clearInterval(t); window.close(); }
+  }, 1000);
+</script>
+</body>
+</html>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
 
 function errorPage(message) {
   return new Response(
