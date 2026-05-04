@@ -4,14 +4,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLeach Photography — Admin</title>
+    <script>
+      // Log every message received
+      window.addEventListener('message', function(e) {
+        console.log('[admin] MESSAGE origin=' + e.origin + ' data=' + String(e.data).slice(0, 120));
+      });
+
+      // Catch unhandled JS errors
+      window.addEventListener('error', function(e) {
+        console.log('[admin] JS ERROR:', e.message, 'at', e.filename + ':' + e.lineno);
+      });
+
+      // Catch unhandled promise rejections (Decap uses promises for API calls)
+      window.addEventListener('unhandledrejection', function(e) {
+        console.log('[admin] UNHANDLED REJECTION:', e.reason);
+      });
+
+      // Intercept all fetch calls so we can see what GitHub API calls Decap makes
+      // and whether they succeed or fail
+      var _fetch = window.fetch;
+      window.fetch = function(input, init) {
+        var url = typeof input === 'string' ? input : (input.url || input);
+        console.log('[admin] FETCH ->', url);
+        return _fetch.apply(this, arguments).then(function(res) {
+          console.log('[admin] FETCH <-', url, res.status, res.ok ? 'OK' : 'FAIL');
+          return res;
+        }).catch(function(err) {
+          console.log('[admin] FETCH ERR', url, err.message);
+          throw err;
+        });
+      };
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-      window.addEventListener('message', function(e) {
-        console.log('[admin] MESSAGE RECEIVED origin=' + e.origin + ' data=' + String(e.data).slice(0, 100));
-      });
-    </script>
   </body>
 </html>
