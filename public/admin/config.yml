@@ -7,7 +7,7 @@ backend:
   name: github
   repo: Foofykinz/JLeach-Photography
   branch: main
-
+  base_url: https://jleach-oauth.alysonwalters22.workers.dev
 publish_mode: simple
 
 site_url: https://www.jleachphotography.com
