@@ -1,0 +1,6 @@
+name = "jleach-photography"
+compatibility_date = "2026-05-01"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "jleach-photography"
