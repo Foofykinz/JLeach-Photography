@@ -4,11 +4,8 @@
 # ============================================================
 
 backend:
-  name: github
-  repo: Foofykinz/JLeach-Photography
+  name: git-gateway
   branch: main
-  base_url: https://jleach-photography.workers.dev
-  auth_endpoint: /api/auth
 
 publish_mode: simple
 
