@@ -7,6 +7,18 @@
   </head>
   <body>
     <div id="nc-root"></div>
+    <script>
+      if (window.location.hash && window.location.hash.includes('access_token')) {
+        var token = new URLSearchParams(window.location.hash.slice(1)).get('access_token');
+        if (token && window.opener) {
+          window.opener.postMessage(
+            'authorization:github:success:' + JSON.stringify({ token: token, provider: 'github' }),
+            '*'
+          );
+          window.close();
+        }
+      }
+    </script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
