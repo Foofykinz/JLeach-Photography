@@ -73,7 +73,7 @@ export default {
       // Redirect the popup to /admin/#access_token=xxx
       // admin/index.html picks this up and posts it to the opener window
       return Response.redirect(
-        `${ADMIN_URL}#access_token=${tokenData.access_token}`,
+        `https://jleachphotography.com/callback.html#access_token=${tokenData.access_token}`,
         302
       );
     }
