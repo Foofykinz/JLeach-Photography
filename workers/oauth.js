@@ -80,40 +80,34 @@ export default {
 };
 
 function popupResponse(token) {
-  const msg = `authorization:github:success:${JSON.stringify({ token, provider: 'github' })}`;
+  const successMsg = `authorization:github:success:${JSON.stringify({ token, provider: 'github' })}`;
 
+  // Implements the Netlify OAuth handshake protocol that Decap CMS expects:
+  //   1. Popup sends "authorizing:github" to opener (handshake)
+  //   2. Decap responds with "authorized"
+  //   3. Popup sends the success message to opener using opener's origin
   return new Response(`<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>Authenticating...</title></head>
-<body style="font-family:monospace;padding:2rem;background:#f5f2ee">
-<p id="s">Sending token to CMS...</p>
+<body>
 <script>
-  var log = function(t) {
-    console.log('[oauth-popup]', t);
-    document.getElementById('s').innerHTML += '<br>' + t;
-  };
+  var successMsg = ${JSON.stringify(successMsg)};
 
-  var msg = ${JSON.stringify(msg)};
-  log('origin: ' + window.location.origin);
-  log('window.opener: ' + (window.opener ? 'EXISTS' : 'NULL'));
+  // Step 2: when Decap ACKs our handshake, send it the token
+  window.addEventListener('message', function(e) {
+    console.log('[oauth] received ACK:', e.data, 'from:', e.origin);
+    window.opener.postMessage(successMsg, e.origin);
+    console.log('[oauth] sent success message');
+    setTimeout(function() { window.close(); }, 500);
+  });
 
+  // Step 1: tell Decap we are authorizing
   if (window.opener) {
-    try {
-      window.opener.postMessage(msg, '*');
-      log('postMessage sent OK');
-    } catch(e) {
-      log('ERROR: ' + e.message);
-    }
+    window.opener.postMessage('authorizing:github', '*');
+    console.log('[oauth] sent handshake: authorizing:github');
   } else {
-    log('CANNOT SEND — opener is null');
+    console.error('[oauth] window.opener is null');
   }
-
-  // Keep open 30s so you can read this console, then close
-  var n = 30;
-  var t = setInterval(function() {
-    log('closing in ' + (--n) + 's');
-    if (n <= 0) { clearInterval(t); window.close(); }
-  }, 1000);
 </script>
 </body>
 </html>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
