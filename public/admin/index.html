@@ -4,34 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JLeach Photography — Admin</title>
-    <script>
-      // Intercept addEventListener/removeEventListener on window
-      // so we can see exactly when Decap registers (or removes) its message handler
-      var _add = EventTarget.prototype.addEventListener;
-      var _rem = EventTarget.prototype.removeEventListener;
-
-      EventTarget.prototype.addEventListener = function(type, fn, opts) {
-        if (this === window && type === 'message') {
-          console.log('[admin] +addEventListener(message)', new Error().stack.split('\n')[2] || '');
-        }
-        return _add.call(this, type, fn, opts);
-      };
-
-      EventTarget.prototype.removeEventListener = function(type, fn, opts) {
-        if (this === window && type === 'message') {
-          console.log('[admin] -removeEventListener(message)', new Error().stack.split('\n')[2] || '');
-        }
-        return _rem.call(this, type, fn, opts);
-      };
-
-      // Also log incoming messages and errors
-      window.addEventListener('message', function(e) {
-        console.log('[admin] MESSAGE origin=' + e.origin + ' data=' + String(e.data).slice(0, 120));
-      });
-      window.addEventListener('unhandledrejection', function(e) {
-        console.log('[admin] UNHANDLED REJECTION:', e.reason);
-      });
-    </script>
   </head>
   <body>
     <div id="nc-root"></div>
