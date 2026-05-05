@@ -64,8 +64,26 @@ const pageTitle = title === 'JLeach Photography' ? title : `${title} | JLeach Ph
           loop:            true,
           autoplayVideos:  false,
           keyboardNavigation: true,
+          download:        false,
         });
       }
+    });
+  </script>
+
+  <!-- Prevent casual right-click saving and drag-to-desktop of photos -->
+  <script>
+    document.addEventListener('contextmenu', (e) => {
+      const t = e.target as HTMLElement;
+      if (
+        t.tagName === 'IMG' ||
+        t.closest('.photo-item, .reel-item, .split-hero-photo, .category-card, .glightbox')
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('dragstart', (e) => {
+      if ((e.target as HTMLElement).tagName === 'IMG') e.preventDefault();
     });
   </script>
 

@@ -896,6 +896,15 @@ main {
   letter-spacing: 0.02em;
 }
 
+/* --- Photo protection — block drag and pointer events on images -------------*/
+.photo-item img,
+.reel-item img,
+.about-headshot {
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none; /* right-click lands on parent container, which JS blocks */
+}
+
 /* --- Photo Grid (Masonry) ----------------------------------*/
 .photo-grid {
   columns: 3;
