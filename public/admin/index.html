@@ -33,43 +33,46 @@
             return resolve(file);
           }
 
-          var reader = new FileReader();
-          reader.onerror = function () { resolve(file); }; // fallback: keep original
-          reader.onload = function (ev) {
-            var img = new Image();
-            img.onerror = function () { resolve(file); }; // fallback: keep original
-            img.onload = function () {
-              var w = img.width;
-              var h = img.height;
-
-              // Scale down proportionally if either dimension exceeds MAX_PX
-              if (w > MAX_PX || h > MAX_PX) {
-                var ratio = Math.min(MAX_PX / w, MAX_PX / h);
-                w = Math.round(w * ratio);
-                h = Math.round(h * ratio);
-              }
-
-              var canvas = document.createElement('canvas');
-              canvas.width  = w;
-              canvas.height = h;
-              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-
-              canvas.toBlob(function (blob) {
-                if (!blob) return resolve(file); // canvas failed — keep original
-
-                // If compression made it larger somehow, keep the original
-                if (blob.size >= file.size) return resolve(file);
-
-                var name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
-                resolve(new File([blob], name, {
-                  type: 'image/jpeg',
-                  lastModified: Date.now(),
-                }));
-              }, 'image/jpeg', QUALITY);
-            };
-            img.src = ev.target.result;
+          // createObjectURL avoids base64 overhead — handles large PNGs without
+          // exhausting memory the way readAsDataURL does on 30–40 MB files
+          var objectURL = URL.createObjectURL(file);
+          var img = new Image();
+          img.onerror = function () {
+            URL.revokeObjectURL(objectURL);
+            resolve(file); // fallback: keep original
           };
-          reader.readAsDataURL(file);
+          img.onload = function () {
+            URL.revokeObjectURL(objectURL); // free memory immediately after load
+
+            var w = img.width;
+            var h = img.height;
+
+            // Scale down proportionally if either dimension exceeds MAX_PX
+            if (w > MAX_PX || h > MAX_PX) {
+              var ratio = Math.min(MAX_PX / w, MAX_PX / h);
+              w = Math.round(w * ratio);
+              h = Math.round(h * ratio);
+            }
+
+            var canvas = document.createElement('canvas');
+            canvas.width  = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+            canvas.toBlob(function (blob) {
+              if (!blob) return resolve(file); // canvas failed — keep original
+
+              // If compression somehow made it larger, keep the original
+              if (blob.size >= file.size) return resolve(file);
+
+              var name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+              resolve(new File([blob], name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              }));
+            }, 'image/jpeg', QUALITY);
+          };
+          img.src = objectURL;
         });
       }
 
